@@ -2,21 +2,22 @@
 set -euo pipefail
 
 APP="LifeCamWB.app"
-BUNDLE_ID="com.local.LifeCamWB"
-BUILD_DIR=".build/release"
+UNIVERSAL_DIR=".build/apple/Products/Release"
 
-echo "==> Building Swift package (release)..."
-swift build -c release 2>&1
+echo "==> Building Swift package (release, universal x86_64 + arm64)..."
+swift build -c release --arch arm64 --arch x86_64 2>&1
 
 echo "==> Creating app bundle..."
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
 mkdir -p "$APP/Contents/Resources"
 
-# Copy binary
-cp "$BUILD_DIR/LifeCamWB" "$APP/Contents/MacOS/LifeCamWB"
+cp "$UNIVERSAL_DIR/LifeCamWB" "$APP/Contents/MacOS/LifeCamWB"
 
-# Write Info.plist  (camera usage description is required)
+# Verify universal binary
+echo "==> Architectures:"
+lipo -info "$APP/Contents/MacOS/LifeCamWB"
+
 cat > "$APP/Contents/Info.plist" << 'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
@@ -43,7 +44,6 @@ cat > "$APP/Contents/Info.plist" << 'PLIST'
 </plist>
 PLIST
 
-# Ad-hoc code sign (required for camera entitlement on macOS 14+)
 echo "==> Signing (ad-hoc)..."
 ENTITLEMENTS_FILE=$(mktemp /tmp/lifecam.entitlements.XXXXXX.plist)
 cat > "$ENTITLEMENTS_FILE" << 'ENT'
@@ -66,13 +66,7 @@ codesign --force --sign - "$APP"
 rm -f "$ENTITLEMENTS_FILE"
 
 echo ""
-echo "✓ Built: $APP"
+echo "✓ Built: $APP (Universal — x86_64 + arm64)"
 echo ""
 echo "Run with:"
 echo "  open $APP"
-echo ""
-echo "Note: IOKit USB access (white balance control) may need sudo:"
-echo "  sudo open $APP"
-echo ""
-echo "Also build the CLI tool:"
-echo "  make"

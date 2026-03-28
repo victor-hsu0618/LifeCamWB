@@ -22,21 +22,41 @@ Settings are automatically saved and restored every time you connect the camera 
 - macOS 13 or later
 - Microsoft LifeCam Studio (USB)
 - Camera permission granted to the app
+- Xcode Command Line Tools (for building from source)
 
-## Build & Run
+## Download (Pre-built)
+
+Go to [Releases](https://github.com/victor-hsu0618/LifeCamWB/releases) and download the latest `LifeCamWB-vX.X.zip`.
+
+1. Unzip and move `LifeCamWB.app` to `/Applications`
+2. **Right-click → Open** on first launch (ad-hoc signed, not notarized — macOS will warn)
+3. Grant camera permission when prompted
+
+> The pre-built binary is a Universal Binary (x86_64 + arm64), runs on both Intel and Apple Silicon Macs.
+
+## Build from Source
 
 ```bash
-# Build the SwiftUI app
+# 1. Install Xcode Command Line Tools (if not already installed)
+xcode-select --install
+
+# 2. Clone the repository
+git clone https://github.com/victor-hsu0618/LifeCamWB.git
+cd LifeCamWB
+
+# 3. Build the SwiftUI app (Universal Binary)
 ./build.sh
 open LifeCamWB.app
 
-# Build the CLI diagnostic tool
+# 4. (Optional) Build the CLI diagnostic tool
 make
-./lifecam_wb dump   # list all CMIO controls
+./lifecam_wb dump   # list all CMIO controls on connected camera
 ./lifecam_wb get    # read current WB temperature
 ./lifecam_wb set 5500
 ./lifecam_wb auto 1
 ```
+
+The build script compiles for both `arm64` and `x86_64` and produces a Universal Binary at `LifeCamWB.app`.
 
 ## Usage
 
