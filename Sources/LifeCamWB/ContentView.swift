@@ -35,24 +35,33 @@ struct ContentView: View {
     }
 
     private var controlPanel: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                GroupBox("Camera") {
-                    Picker("", selection: $camera.selectedDevice) {
-                        ForEach(camera.availableDevices, id: \.uniqueID) { d in
-                            Text(d.localizedName).tag(Optional(d))
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    GroupBox("Camera") {
+                        Picker("", selection: $camera.selectedDevice) {
+                            ForEach(camera.availableDevices, id: \.uniqueID) { d in
+                                Text(d.localizedName).tag(Optional(d))
+                            }
                         }
+                        .labelsHidden()
                     }
-                    .labelsHidden()
+                    WBGroupBox(uvc: uvc)
+                    if uvc.isConnected && !uvc.cameraControls.isEmpty {
+                        CameraControlsBox(uvc: uvc)
+                    }
                 }
-                WBGroupBox(uvc: uvc)
-                if uvc.isConnected && !uvc.cameraControls.isEmpty {
-                    CameraControlsBox(uvc: uvc)
-                }
-                Spacer(minLength: 0)
-                StartupBox()
+                .padding(16)
             }
-            .padding(16)
+            Divider()
+            StartupBox()
+                .padding(12)
+            Text("LifeCamWB v1.2")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 8)
         }
         .frame(width: 300)
         .background(.regularMaterial)
