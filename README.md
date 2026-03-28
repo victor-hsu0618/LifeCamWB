@@ -28,7 +28,16 @@ Settings are automatically saved and restored every time you connect the camera 
 - Camera permission granted to the app
 - Xcode Command Line Tools (for building from source)
 
-## Download (Pre-built)
+## Install
+
+### Option 1: Homebrew (recommended)
+
+```bash
+brew tap victor-hsu0618/tap
+brew install --cask lifecamwb
+```
+
+### Option 2: Manual Download
 
 Go to [Releases](https://github.com/victor-hsu0618/LifeCamWB/releases) and download the latest `LifeCamWB-vX.X.zip`.
 
@@ -168,7 +177,16 @@ The LifeCam firmware ignores standard CMIO `NativeValue` (Float32) writes. Actua
 - 允許 app 存取相機權限
 - Xcode Command Line Tools（從原始碼 build 時需要）
 
-## 下載（預編譯版本）
+## 安裝方式
+
+### 方法一：Homebrew（建議）
+
+```bash
+brew tap victor-hsu0618/tap
+brew install --cask lifecamwb
+```
+
+### 方法二：手動下載
 
 前往 [Releases](https://github.com/victor-hsu0618/LifeCamWB/releases) 下載最新的 `LifeCamWB-vX.X.zip`。
 
